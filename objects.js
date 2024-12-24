@@ -104,9 +104,7 @@ const pets = (people) => people.flatMap((person) => person.pets);
 const countFullyVaccinatedPets = (people) =>
   pets(people).filter((pet) => pet.isVaccinated).length;
 
-const getNameAndType = function (pet) {
-  return { type: pet.type, name: pet.name };
-};
+const getNameAndType = (pet) => ({ type: pet.type, name: pet.name });
 
 const nameAndTypeOfAnimal = (people) => pets(people).map(getNameAndType);
 
@@ -136,17 +134,15 @@ const CSEStudiedPeopleCount = (people) => CSEStudiedPeople(people).length;
 const CSEStudiedPeoplePetsCount = (people) =>
   pets(CSEStudiedPeople(people)).length;
 
-const numberOfPets = (person) => person.pets.length;
-
 const moreThanOnePetPeopleCount = (people) =>
-  people.filter((person) => numberOfPets(person) > 1).length;
+  people.filter((person) => person.pets.length > 1).length;
 
-const petsAssosiatedFavouriteActivities = function (people) {
+const petsAssosiatedFavouriteActivities = (people) => {
   const petsWithActivity = pets(people).filter((pet) => pet.favouriteActivity);
   return petsWithActivity.map((pet) => pet.name);
 };
 
-const animalsBelongsToPeopleInBangloreOrChennai = function (people) {
+const animalsBelongsToPeopleInBangloreOrChennai = (people) => {
   const whoLivesInBngOrChennai = people.filter((person) =>
     ["Bangalore", "Chennai"].includes(person.city)
   );
@@ -154,7 +150,7 @@ const animalsBelongsToPeopleInBangloreOrChennai = function (people) {
   return pets(whoLivesInBngOrChennai).map((pet) => pet.name);
 };
 
-const vaccinatedPetsBelongsToPeopleDoNotOwnACar = function (people) {
+const vaccinatedPetsBelongsToPeopleDoNotOwnACar = (people) => {
   const peopleDoNotOwnACar = people.filter((person) => !person.hasCar);
   return pets(peopleDoNotOwnACar).length;
 };
@@ -164,10 +160,8 @@ const countMoreThanTwoHobbies = (people) =>
 
 const youngest = (younger, pet) => (younger.age > pet.age ? pet : younger);
 
-const youngestPet = function (people) {
-  const petsAgeAndNames = pets(people).map(function (pet) {
-    return { name: pet.name, age: pet.age };
-  });
+const youngestPet = (people) => {
+  const petsAgeAndNames = pets(people).map((pet) => getNameAndType(pet));
 
   return petsAgeAndNames.reduce(youngest);
 };
@@ -178,12 +172,12 @@ const individualDoNotOwnAnyPets = (people) =>
 const countCitiesStartsWithB = (people) =>
   people.filter((person) => person.city.at(0) === "B").length;
 
-const getOccurences = function (wordsOccurence, element) {
+const getOccurences = (wordsOccurence, element) => {
   wordsOccurence[element] = (wordsOccurence[element] || 0) + 1;
   return wordsOccurence;
 };
 
-const mostOccurence = function (wordCount) {
+const mostOccurence = (wordCount) => {
   let mostOccurring = null;
   let maxCount = 0;
 
@@ -197,19 +191,16 @@ const mostOccurence = function (wordCount) {
   return mostOccurring;
 };
 
-const mostCommonTypePet = function (people) {
+const mostCommonTypePet = (people) => {
   const petTypes = pets(people).map((pet) => pet.type);
   const occurrences = petTypes.reduce(getOccurences, {});
   return mostOccurence(occurrences);
 };
 
-const countEquals = function ([reference, count], element) {
-  return reference.includes(element)
-    ? [reference, count + 1]
-    : [reference, count];
-};
+const countEquals = ([reference, count], element) =>
+  reference.includes(element) ? [reference, count + 1] : [reference, count];
 
-const countSharingHobbiesWithRamesh = function (people) {
+const countSharingHobbiesWithRamesh = (people) => {
   const hobbiesWithOutRamesh = people
     .filter((person) => !(person.name === "Ramesh"))
     .flatMap((person) => person.hobbies);
@@ -221,7 +212,7 @@ const countSharingHobbiesWithRamesh = function (people) {
   return hobbiesWithOutRamesh.reduce(countEquals, [rameshHobbies, 0])[1];
 };
 
-const getBookName = function (array, person) {
+const getPeopleNameAndBookName = (array, person) => {
   const book = [
     ...person.hobbies.filter((hobby) => hobby.startsWith("Reading")),
   ];
@@ -230,12 +221,12 @@ const getBookName = function (array, person) {
   return array;
 };
 
-const nameAndTypeOfBookAreMentionedAsInterests = function (people) {
+const nameAndTypeOfBookAreMentionedAsInterests = (people) => {
   const listOfReadingPeople = people.filter((person) =>
     person.hobbies.join(" ").includes("Reading")
   );
 
-  return listOfReadingPeople.reduce(getBookName, []);
+  return listOfReadingPeople.reduce(getPeopleNameAndBookName, []);
 };
 
 /*---------------- TESTING SECTION --------------------------*/
