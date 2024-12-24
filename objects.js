@@ -222,7 +222,9 @@ const countSharingHobbiesWithRamesh = function (people) {
 };
 
 const getBookName = function (array, person) {
-  const book = [...person.hobbies.filter((x) => x.startsWith("Reading"))];
+  const book = [
+    ...person.hobbies.filter((hobby) => hobby.startsWith("Reading")),
+  ];
   array.push({ name: person.name, books: book });
 
   return array;
