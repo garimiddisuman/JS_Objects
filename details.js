@@ -75,7 +75,7 @@ const people = [
     isEmployed: false,
     doesPreferPublicTransport: true,
     profession: "Professional dancer",
-    hobbies: ["modern fantasy novels", "binge-watching sci-fi shows"],
+    hobbies: ["Reading modern fantasy novels", "binge-watching sci-fi shows"],
     hasPet: true,
     pets: [
       {
