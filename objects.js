@@ -94,28 +94,28 @@ const people = [
 ];
 
 const countCurrentlyEmployed = (people) =>
-  people.filter((person) => person.isEmployed).length;
+  people.filter(({ isEmployed }) => isEmployed).length;
 
 const countPeopleWhoHasCar = (people) =>
-  people.filter((person) => person.hasCar).length;
+  people.filter(({ hasCar }) => hasCar).length;
 
-const pets = (people) => people.flatMap((person) => person.pets);
+const pets = (people) => people.flatMap(({ pets }) => pets);
 
 const countFullyVaccinatedPets = (people) =>
-  pets(people).filter((pet) => pet.isVaccinated).length;
+  pets(people).filter(({ isVaccinated }) => isVaccinated).length;
 
-const getPetNameAndType = (pet) => ({ type: pet.type, name: pet.name });
+const getPetNameAndType = ({ type, name }) => ({ type, name });
 
 const nameAndTypeOfAnimal = (people) => pets(people).map(getPetNameAndType);
 
-const cities = (people) => people.map((person) => person.city);
+const cities = (people) => people.map(({ city }) => city);
 
 const hobbies = (people) => people.flatMap((person) => person.hobbies);
 
 const hobbiesCount = (people) => hobbies(people).length;
 
 const petCountOfPeopleWhoAreUnemployed = function (people) {
-  const unEmployed = people.filter((person) => !person.isEmployed);
+  const unEmployed = people.filter(({ isEmployed }) => !isEmployed);
   return pets(unEmployed).length;
 };
 
@@ -124,10 +124,10 @@ const avg = (numbers) => {
   return sum / numbers.length;
 };
 
-const averageOfAges = (people) => avg(people.map((person) => person.age));
+const averageOfAges = (people) => avg(people.map(({ age }) => age));
 
 const CSEStudiedPeople = (people) =>
-  people.filter((person) => "Computer Science" === person.education);
+  people.filter(({ education }) => "Computer Science" === education);
 
 const CSEStudiedPeopleCount = (people) => CSEStudiedPeople(people).length;
 
@@ -135,33 +135,33 @@ const CSEStudiedPeoplePetsCount = (people) =>
   pets(CSEStudiedPeople(people)).length;
 
 const moreThanOnePetPeopleCount = (people) =>
-  people.filter((person) => person.pets.length > 1).length;
+  people.filter(({ pets }) => pets.length > 1).length;
 
 const petsAssosiatedFavouriteActivities = (people) => {
   const petsWithActivity = pets(people).filter((pet) => pet.favouriteActivity);
-  return petsWithActivity.map((pet) => pet.name);
+  return petsWithActivity.map(({ name }) => name);
 };
 
 const animalsBelongsToPeopleInBangloreOrChennai = (people) => {
-  const whoLivesInBngOrChennai = people.filter((person) =>
-    ["Bangalore", "Chennai"].includes(person.city)
+  const whoLivesInBngOrChennai = people.filter(({ city }) =>
+    ["Bangalore", "Chennai"].includes(city)
   );
 
-  return pets(whoLivesInBngOrChennai).map((pet) => pet.name);
+  return pets(whoLivesInBngOrChennai).map(({ name }) => name);
 };
 
 const vaccinatedPetsBelongsToPeopleDoNotOwnACar = (people) => {
-  const peopleDoNotOwnACar = people.filter((person) => !person.hasCar);
+  const peopleDoNotOwnACar = people.filter(({ hasCar }) => !hasCar);
   return pets(peopleDoNotOwnACar).length;
 };
 
 const countMoreThanTwoHobbies = (people) =>
-  people.filter((person) => person.hobbies.length > 2).length;
+  people.filter(({ hobbies }) => hobbies.length > 2).length;
 
 const youngest = (younger, pet) => (younger.age > pet.age ? pet : younger);
 
 const youngestPet = (people) => {
-  const petsAgeAndNames = pets(people).map((pet) => getPetNameAndType(pet));
+  const petsAgeAndNames = pets(people).map(({ name, age }) => ({ name, age }));
 
   return petsAgeAndNames.reduce(youngest);
 };
@@ -170,31 +170,20 @@ const individualDoNotOwnAnyPets = (people) =>
   people.filter((person) => !person.pets);
 
 const countCitiesStartsWithB = (people) =>
-  people.filter((person) => person.city.at(0) === "B").length;
+  people.filter(({ city }) => city.at(0) === "B").length;
 
 const getOccurences = (wordsOccurence, element) => {
   wordsOccurence[element] = (wordsOccurence[element] || 0) + 1;
   return wordsOccurence;
 };
 
-const mostOccurence = (wordCount) => {
-  let mostOccurring = null;
-  let maxCount = 0;
-
-  for (const word in wordCount) {
-    if (wordCount[word] > maxCount) {
-      maxCount = wordCount[word];
-      mostOccurring = word;
-    }
-  }
-
-  return mostOccurring;
-};
+const mostOccurence = ([word1, count1], [word2, count2]) =>
+  count1 < count2 ? [word2, count2] : [word1, count1];
 
 const mostCommonTypePet = (people) => {
-  const petTypes = pets(people).map((pet) => pet.type);
+  const petTypes = pets(people).map(({ type }) => type);
   const occurrences = petTypes.reduce(getOccurences, {});
-  return mostOccurence(occurrences);
+  return Object.entries(occurrences).reduce(mostOccurence);
 };
 
 const countEquals = ([reference, count], element) =>
