@@ -53,14 +53,14 @@ const people = [
     hasPet: true,
     pets: [
       {
-        type: "Persian cats",
+        type: "Persian cat",
         name: "Bella",
         age: 3,
         isVaccinated: true,
         favouriteActivity: ["love lounging in the sun"],
       },
       {
-        type: "Persian cats",
+        type: "Persian cat",
         name: "Leo",
         age: 3,
         isVaccinated: true,
@@ -101,11 +101,8 @@ const countPeopleWhoHasCar = (people) =>
 
 const pets = (people) => people.flatMap((person) => person.pets);
 
-const countFullyVaccinatedPets = (people) => {
-  const vaccinatedPets = pets(people).filter((pet) => pet.isVaccinated);
-
-  return vaccinatedPets.length;
-};
+const countFullyVaccinatedPets = (people) =>
+  pets(people).filter((pet) => pet.isVaccinated).length;
 
 const getNameAndType = function (pet) {
   return { type: pet.type, name: pet.name };
@@ -119,17 +116,13 @@ const hobbies = (people) => people.flatMap((person) => person.hobbies);
 
 const hobbiesCount = (people) => hobbies(people).length;
 
-const numberOfPets = (person) => person.pets.length;
-
-const add = (x, y) => x + y;
-
 const petCountOfPeopleWhoAreUnemployed = function (people) {
   const unEmployed = people.filter((person) => !person.isEmployed);
-  return unEmployed.map(numberOfPets).reduce(add, 0);
+  return pets(unEmployed).length;
 };
 
 const avg = (numbers) => {
-  const sum = numbers.reduce(add, 0);
+  const sum = numbers.reduce((x, y) => x + y, 0);
   return sum / numbers.length;
 };
 
@@ -140,8 +133,10 @@ const CSEStudiedPeople = (people) =>
 
 const CSEStudiedPeopleCount = (people) => CSEStudiedPeople(people).length;
 
-const CSStudiedPeoplePetsCount = (people) =>
-  CSEStudiedPeople(people).map(numberOfPets).reduce(add, 0);
+const CSEStudiedPeoplePetsCount = (people) =>
+  pets(CSEStudiedPeople(people)).length;
+
+const numberOfPets = (person) => person.pets.length;
 
 const moreThanOnePetPeopleCount = (people) =>
   people.filter((person) => numberOfPets(person) > 1).length;
@@ -161,15 +156,13 @@ const animalsBelongsToPeopleInBangloreOrChennai = function (people) {
 
 const vaccinatedPetsBelongsToPeopleDoNotOwnACar = function (people) {
   const peopleDoNotOwnACar = people.filter((person) => !person.hasCar);
-  return peopleDoNotOwnACar.map(numberOfPets).reduce(add, 0);
+  return pets(peopleDoNotOwnACar).length;
 };
 
 const countMoreThanTwoHobbies = (people) =>
   people.filter((person) => person.hobbies.length > 2).length;
 
-const youngest = function (younger, pet) {
-  return younger.age > pet.age ? pet : younger;
-};
+const youngest = (younger, pet) => (younger.age > pet.age ? pet : younger);
 
 const youngestPet = function (people) {
   const petsAgeAndNames = pets(people).map(function (pet) {
@@ -266,7 +259,7 @@ const testsFrom1To10 = function () {
 
 const testsFrom11To20 = function () {
   const fun2 = [
-    CSStudiedPeoplePetsCount,
+    CSEStudiedPeoplePetsCount,
     moreThanOnePetPeopleCount,
     petsAssosiatedFavouriteActivities,
     animalsBelongsToPeopleInBangloreOrChennai,
