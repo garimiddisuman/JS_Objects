@@ -104,9 +104,9 @@ const pets = (people) => people.flatMap((person) => person.pets);
 const countFullyVaccinatedPets = (people) =>
   pets(people).filter((pet) => pet.isVaccinated).length;
 
-const getNameAndType = (pet) => ({ type: pet.type, name: pet.name });
+const getPetNameAndType = (pet) => ({ type: pet.type, name: pet.name });
 
-const nameAndTypeOfAnimal = (people) => pets(people).map(getNameAndType);
+const nameAndTypeOfAnimal = (people) => pets(people).map(getPetNameAndType);
 
 const cities = (people) => people.map((person) => person.city);
 
@@ -161,7 +161,7 @@ const countMoreThanTwoHobbies = (people) =>
 const youngest = (younger, pet) => (younger.age > pet.age ? pet : younger);
 
 const youngestPet = (people) => {
-  const petsAgeAndNames = pets(people).map((pet) => getNameAndType(pet));
+  const petsAgeAndNames = pets(people).map((pet) => getPetNameAndType(pet));
 
   return petsAgeAndNames.reduce(youngest);
 };
