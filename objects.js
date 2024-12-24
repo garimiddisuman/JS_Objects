@@ -2,7 +2,7 @@ const people = [
   {
     name: "Rahul",
     city: "Pune",
-    age: null,
+    age: 30,
     hasCar: true,
     isEmployed: true,
     doesPreferPublicTransport: false,
@@ -28,7 +28,6 @@ const people = [
     hasCar: false,
     isEmployed: false,
     doesPreferPublicTransport: true,
-    profession: "Graphic designer",
     education: "Computer Science",
     hobbies: ["Cooking", "Experiments with Italian recipes"],
     hasPet: true,
@@ -93,7 +92,7 @@ const people = [
   },
 ];
 
-const countCurrentlyEmployed = (people) =>
+const countEmployed = (people) =>
   people.filter(({ isEmployed }) => isEmployed).length;
 
 const countPeopleWhoHasCar = (people) =>
@@ -101,30 +100,28 @@ const countPeopleWhoHasCar = (people) =>
 
 const pets = (people) => people.flatMap(({ pets }) => pets);
 
-const countFullyVaccinatedPets = (people) =>
+const countVaccinatedPets = (people) =>
   pets(people).filter(({ isVaccinated }) => isVaccinated).length;
 
-const getPetNameAndType = ({ type, name }) => ({ type, name });
-
-const nameAndTypeOfAnimal = (people) => pets(people).map(getPetNameAndType);
+const typeAndNameOfPets = (people) =>
+  pets(people).map(({ type, name }) => ({ type, name }));
 
 const cities = (people) => people.map(({ city }) => city);
 
-const hobbies = (people) => people.flatMap((person) => person.hobbies);
+const countHobbies = (people) =>
+  people.flatMap(({ hobbies }) => hobbies).length;
 
-const hobbiesCount = (people) => hobbies(people).length;
-
-const petCountOfPeopleWhoAreUnemployed = function (people) {
+const countPetsOfPeopleWhoAreUnemployed = function (people) {
   const unEmployed = people.filter(({ isEmployed }) => !isEmployed);
   return pets(unEmployed).length;
 };
 
-const avg = (numbers) => {
+const average = (numbers) => {
   const sum = numbers.reduce((x, y) => x + y, 0);
   return sum / numbers.length;
 };
 
-const averageOfAges = (people) => avg(people.map(({ age }) => age));
+const averageOfAges = (people) => average(people.map(({ age }) => age));
 
 const CSEStudiedPeople = (people) =>
   people.filter(({ education }) => "Computer Science" === education);
@@ -143,11 +140,11 @@ const petsAssosiatedFavouriteActivities = (people) => {
 };
 
 const animalsBelongsToPeopleInBangloreOrChennai = (people) => {
-  const whoLivesInBngOrChennai = people.filter(({ city }) =>
-    ["Bangalore", "Chennai"].includes(city)
+  const peopleLivesInBngOrChennai = people.filter(
+    ({ city }) => city in { Bangalore: true, Chennai: true }
   );
 
-  return pets(whoLivesInBngOrChennai).map(({ name }) => name);
+  return pets(peopleLivesInBngOrChennai).map(({ name }) => name);
 };
 
 const vaccinatedPetsBelongsToPeopleDoNotOwnACar = (people) => {
@@ -202,41 +199,38 @@ const countSharingHobbiesWithRamesh = (people) => {
 };
 
 const getPeopleNameAndBookName = (array, person) => {
-  const book = [
-    ...person.hobbies.filter((hobby) => hobby.startsWith("Reading")),
-  ];
-  array.push({ name: person.name, books: book });
+  const books = person.hobbies.filter((hobby) => hobby.startsWith("Reading"));
 
+  array.push({ name: person.name, books });
   return array;
 };
 
 const nameAndTypeOfBookAreMentionedAsInterests = (people) => {
   const listOfReadingPeople = people.filter((person) =>
-    person.hobbies.join(" ").includes("Reading")
+    person.hobbies.join("").includes("Reading")
   );
 
   return listOfReadingPeople.reduce(getPeopleNameAndBookName, []);
 };
 
 /*---------------- TESTING SECTION --------------------------*/
-const test = (fn) => console.log("\n  ", fn.name, "->", fn(people));
+const display = (fn) => console.log("\n  ", fn.name, "->", fn(people));
 
 const testsFrom1To10 = function () {
   const fun1 = [
-    countCurrentlyEmployed,
+    countEmployed,
     countPeopleWhoHasCar,
-    countFullyVaccinatedPets,
-    nameAndTypeOfAnimal,
+    countVaccinatedPets,
+    typeAndNameOfPets,
     cities,
-    hobbies,
-    hobbiesCount,
-    petCountOfPeopleWhoAreUnemployed,
+    countHobbies,
+    countPetsOfPeopleWhoAreUnemployed,
     averageOfAges,
     CSEStudiedPeopleCount,
     nameAndTypeOfBookAreMentionedAsInterests,
   ];
 
-  fun1.map(test);
+  fun1.map(display);
 };
 
 const testsFrom11To20 = function () {
@@ -254,7 +248,7 @@ const testsFrom11To20 = function () {
     countSharingHobbiesWithRamesh,
   ];
 
-  fun2.map(test);
+  fun2.map(display);
 };
 
 const testAll = function () {
